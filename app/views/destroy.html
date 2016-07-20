@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset ="utf-8">
+	<title>Courses DESTROY Index Page</title>
+	<meta name="description" content="Courses destroy page using Pylot">
+	<link rel="stylesheet" type="text/css" href="/static/css/style.css">
+	<link rel="stylesheet" type="text/css" href="/static/css/normalize.css">
+</head>
+<body>
+	<div id="wrapper">
+		<h1>Are you sure you want to delete the following course?</h1>
+		<div class="box">
+			{% with messages = get_flashed_messages() %}
+				{% if messages %}
+					{% for message in messages %}
+						{% if 'delete' in message %}
+							<span class="error">{{message}}</span>
+						{% endif %}
+					{% endfor %}
+				{% endif %}
+			{% endwith %}
+			{% if course %}
+				<p>ID: {{ course['id'] }}</p>
+				<p>Name: "{{ course['title'] }}"</p>
+				<p>Description: {{ course['description'] }}</p>
+				<form action="/process_delete/{{course['id']}}" method='POST'>
+					<input type="submit" value="No" name="submit">
+					<input type="submit" value="Yes! I want to delete this" name="submit">
+				</form>
+			{% endif %}
+		</div>
+		<a href="/">Go back</a>
+	</div>
+</body>
+</html>

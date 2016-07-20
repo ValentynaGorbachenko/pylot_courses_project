@@ -1,8 +1,84 @@
+<!DOCTYPE html>
 <html>
-  <head>
-    <link rel="stylesheet" href="/static/css/styles.css" type="text/css">
-  </head>
-  <body>
-    The best place to start is the "WelcomeController.py" file in app/controllers.
-  </body>
+<head>
+	<meta charset ="utf-8">
+	<title>Courses Index Page</title>
+	<meta name="description" content="Courses home page using Pylot">
+
+	<link rel="stylesheet" type="text/css" href="/static/css/style.css">
+	<link rel="stylesheet" type="text/css" href="/static/css/normalize.css">
+</head>
+<body>
+	<div id="wrapper">
+		<h1>Courses For Ninjas</h1>
+		<div class="box">
+			<h2>Add a new course</h2>
+			{% with messages = get_flashed_messages() %}
+				{% if messages %}
+					{% for message in messages %}
+						{% if 'try add' in message %}
+							<span class="error">{{message}}</span>
+						{% elif 'added successfully' in message %}
+							<span class="valid">{{message}}</span>
+						{% elif 'cannot' in message  %}
+							<span class="error">{{message}}</span>
+						{% endif %}
+					{% endfor %}
+				{% endif %}
+			{% endwith %}
+			<form action="/courses/add" method="POST">
+				<label for="name">Name: 
+					<input type="text" name="name" id="name" placeholder="Name of a new course">
+				</label>
+				<label for="description"><span>Description: </span>
+					<textarea name="description" id="description" placeholder="Description goes here"></textarea>
+				</label>
+				<input type="submit" value="Add">
+			</form>
+		</div>
+		<div class="box">
+		<h2>Courses</h2>
+		{% with messages = get_flashed_messages() %}
+				{% if messages %}
+					{% for message in messages %}
+						{% if 'deleted' in message %}
+							<span class="valid">{{message}}</span>
+						{% elif 'changed' in message %}
+							<span class="valid">{{message}}</span>
+						{% elif 'updated' in message %}
+							<span class="valid">{{message}}</span>
+						{% elif 'delete' in mesage %}
+							<span class="error">{{message}}</span>
+						{% endif %}
+					{% endfor %}
+				{% endif %}
+			{% endwith %}
+		<table>
+			<thead>
+				<th>Course Name</th>
+				<th>Description</th>
+				<th>Date Added</th>
+				<th>Action</th>
+			</thead>
+			<tbody>
+				{% for course in courses %}
+				
+					<tr>
+						<td>"{{course.title}}"</td>
+						<td>{{course.description}}</td>
+						<td>{{course.created_at.strftime('%b %d %Y %I:%M%p')}}</td>
+						<td>
+							<a href="/edit/{{course.id}}">Edit</a>
+							<a href="/destroy/{{course.id}}">Remove</a>
+						</td>
+					</tr>
+
+				{% endfor %}
+			</tbody>
+		</table>
+		
+		</div>
+
+	</div>
+</body>
 </html>
